@@ -1,9 +1,12 @@
 $(function($) { // Safest way to declare jQuery in my opinion. This eliminates the risk of collisions with other frameworks.
 
 	var kittentimeout;
+	var kitteninterval;
 
 	$('#btn-fetch').bind('click', function() {
+		clearInterval(kitteninterval); // Stop autmatic refresh if the user takes control. We do this to reset the timer so that the images are shown 30 seconds before an automatic refresh happens.
 		fetch();
+		startinterval(kitteninterval);
 	});
 
 	$('#btn-about').bind('click', function() {
@@ -44,9 +47,9 @@ $(function($) { // Safest way to declare jQuery in my opinion. This eliminates t
 
 				kittentimeout = setTimeout(function() {
 					$images.append('\
-						<h3>Ah nevermind, here\'s some more kittens instead.</h3>\
+						<h3>Ah nevermind, here\'s some kittens instead.</h3>\
 						<div id="imgholder-1" class="image-holder">\
-								<img id="img1" src="http://placekitten.com/550/300" style="width: 550px; height: 300px;">\
+								<img id="img1" src="http://placekitten.com/550/300" style="width: 550px;">\
 							</div>');
 					$('.image-holder').fadeIn(400);
 				}, 4000);
@@ -70,7 +73,7 @@ $(function($) { // Safest way to declare jQuery in my opinion. This eliminates t
 					$images.append('\
 						<h3>The API couldn\'t give us any valid images, so here\'s a picture of a kitten instead.</h3>\
 						<div id="imgholder-1" class="image-holder">\
-								<img id="img1" src="http://placekitten.com/400/250" style="width: 400px; height: 250px;">\
+								<img id="img1" src="http://placekitten.com/400/250" style="width: 400px;">\
 								<p>Kittens are awesome.</p>\
 							</div>');
 					$('.image-holder').fadeIn(400);
@@ -111,7 +114,11 @@ $(function($) { // Safest way to declare jQuery in my opinion. This eliminates t
 		}
 	}
 
-	fetch(); // Initial fetch
+	function startinterval(interval) {
+		kitteninterval = setInterval(fetch, 30000);
+	}
 
-	setInterval(fetch, 30000);
+	fetch(); // Initial fetch
+	startinterval(kitteninterval);
+
 });
